@@ -8,6 +8,8 @@ var router = express.Router();
 var fs = require('fs');
 var jsdom = require('jsdom');
 
+var ZOOM_FIX = 3
+
 var d3 = require('d3');
 var XMLHttpRequest = require('xhr2')
 
@@ -542,7 +544,7 @@ router.post('/request-map', function(req, res, next) {
 
   // -74.0059700, 40.7142700
   // 74.0059700 W, 40.7142700 N
-  var zoom = parseInt(req.body.zoomLevel) + 2;
+  var zoom = parseInt(req.body.zoomLevel) + ZOOM_FIX;
 
   var lat1 = lat2tile(parseFloat(req.body.startLat), zoom)
   var lat2 = lat2tile(parseFloat(req.body.endLat), zoom)
@@ -665,7 +667,7 @@ router.post('/request-map', function(req, res, next) {
                 geojsonToReform[response][dataKindTitle] = {"features": []};
               } 
               console.log(feature.properties.min_zoom)
-              if (feature.properties.min_zoom <= zoom - 2) {
+              if (feature.properties.min_zoom <= zoom - ZOOM_FIX) {
 
                 geojsonToReform[response][dataKindTitle].features.push(feature);    
               }
@@ -680,7 +682,7 @@ router.post('/request-map', function(req, res, next) {
             let dataKindTitle = (layer.source == "buildings") ? feature.properties.kind_detail : feature.properties.kind
             if (geojsonToReform[response]) {
               if (geojsonToReform[response].hasOwnProperty(dataKindTitle)) {
-                if (feature.properties.min_zoom <= zoom - 2) {
+                if (feature.properties.min_zoom <= zoom - ZOOM_FIX) {
                   geojsonToReform[response][dataKindTitle].features.push(feature);    
                 }
               
@@ -774,11 +776,11 @@ function lat2tile(lat,zoom)  {
 }
 
 function tile2Lon(tileLon, zoom) {
-  return (tileLon*360/Math.pow(2,zoom)-180).toFixed(10);
+  return (tileLon*360/Math.pow(2,zoom)-180).toFixed(15);
 }
 
 function tile2Lat(tileLat, zoom) {
-  return ((360/Math.PI) * Math.atan(Math.pow( Math.E, (Math.PI - 2*Math.PI*tileLat/(Math.pow(2,zoom)))))-90).toFixed(10);
+  return ((360/Math.PI) * Math.atan(Math.pow( Math.E, (Math.PI - 2*Math.PI*tileLat/(Math.pow(2,zoom)))))-90).toFixed(15);
 }
 
 module.exports = router;
