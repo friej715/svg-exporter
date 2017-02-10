@@ -1,6 +1,7 @@
 "use strict";
 
 require("babel-polyfill");
+var _ = require("lodash")
 
 var express = require('express');
 var router = express.Router();
@@ -30,115 +31,130 @@ router.get('/request-map', function(req, res, next) {
 
 function setupJson(dKinds) {
   var formattedJson = {};
-  var dataKind = dKinds.join(',');
+  // var dataKind = dKinds.join(',');
+  // console.log(dKinds)
 
-  for (var i = 0; i < dKinds.length; i++) {
-    // this is sublayer for each data layer
-    // should add more meaningful layers for each
-    if(dKinds[i] === 'roads') {
-      formattedJson[dKinds[i]] = {
-        major_road: {
-          features: []
-        },
-        minor_road: {
-          features: []
-        },
-        highway: {
-          features:[]
-        },
-        aerialway: {
-          features: []
-        },
-        rail: {
-          features:[]
-        },
-        path: {
-          features:[]
-        },
-        ferry: {
-          features:[]
-        },
-        etc: {
-          features: []
+  for (let i = 0; i < dKinds.length; i++) {
+    let layerName = dKinds[i]["source-layer"];
+    if (layerName == dKinds[i].id && dKinds[i].id.indexOf("temp") == -1) {
+      // that means that All is checked;
+      if(layerName === 'roads') {
+        formattedJson[layerName] = {
+          major_road: {
+            features: []
+          },
+          minor_road: {
+            features: []
+          },
+          highway: {
+            features:[]
+          },
+          aerialway: {
+            features: []
+          },
+          rail: {
+            features:[]
+          },
+          path: {
+            features:[]
+          },
+          ferry: {
+            features:[]
+          },
+          etc: {
+            features: []
+          }
+        }
+      } else if (layerName === 'boundaries') {
+        formattedJson[layerName] = {
+          country: {
+            features: []
+          },
+          county: {
+            features: []
+          },
+          disputed: {
+            features: []
+          },
+          indefinite: {
+            features: []
+          },
+          interminate: {
+            features: []
+          },
+          lease_limit: {
+            features: []
+          },
+          line_of_control: {
+            features: []
+          },
+          locality: {
+            features: []
+          },
+          microregion: {
+            features: []
+          },
+          map_unit: {
+            features: []
+          },
+          region: {
+            features: []
+          },
+          etc: {
+            features: []
+          }
+        }
+      } else if (layerName === 'water') {
+        formattedJson[layerName] = {
+          basin: {
+            features: []
+          },
+          bay: {
+            features: []
+          },
+          dock: {
+            features: []
+          },
+          lake: {
+            features: []
+          },
+          ocean: {
+            features: []
+          },
+          river: {
+            features: []
+          },
+          riverbank: {
+            features: []
+          },
+          swimming_pool: {
+            features: []
+          },
+          etc: {
+            features: []
+          }
         }
       }
-    } else if (dKinds[i] === 'boundaries') {
-      formattedJson[dKinds[i]] = {
-        country: {
-          features: []
-        },
-        county: {
-          features: []
-        },
-        disputed: {
-          features: []
-        },
-        indefinite: {
-          features: []
-        },
-        interminate: {
-          features: []
-        },
-        lease_limit: {
-          features: []
-        },
-        line_of_control: {
-          features: []
-        },
-        locality: {
-          features: []
-        },
-        microregion: {
-          features: []
-        },
-        map_unit: {
-          features: []
-        },
-        region: {
-          features: []
-        },
-        etc: {
-          features: []
+      else
+        formattedJson[layerName] = {
+          etc: {
+            features: []
+          }
         }
+    } 
+    else {
+      let subLayer = dKinds[i]["id"];
+      if (formattedJson[layerName]) {
+        formattedJson[layerName][subLayer] = {features: []}
+      } else {
+        formattedJson[layerName] = {};
+        formattedJson[layerName][subLayer] = {features: []}
       }
-    } else if (dKinds[i] === 'water') {
-      formattedJson[dKinds[i]] = {
-        basin: {
-          features: []
-        },
-        bay: {
-          features: []
-        },
-        dock: {
-          features: []
-        },
-        lake: {
-          features: []
-        },
-        ocean: {
-          features: []
-        },
-        river: {
-          features: []
-        },
-        riverbank: {
-          features: []
-        },
-        swimming_pool: {
-          features: []
-        },
-        etc: {
-          features: []
-        }
-      }
+
     }
-    else
-      formattedJson[dKinds[i]] = {
-        etc: {
-          features: []
-        }
-      }
+    
   }
+  console.log(formattedJson)
   return formattedJson;
 }
 
@@ -164,7 +180,6 @@ router.post('/request-map', function(req, res, next) {
 
   // -74.0059700, 40.7142700
   // 74.0059700 W, 40.7142700 N
-  console.log(req.body);
   var zoom = parseInt(req.body.zoomLevel);
 
   var lat1 = lat2tile(parseFloat(req.body.startLat), zoom)
@@ -195,12 +210,13 @@ router.post('/request-map', function(req, res, next) {
   // need uis for datakind, zoom
 
   var dKinds = [];
-  if(req.body.boundaries) dKinds.push('boundaries');
-  if(req.body.earth) dKinds.push('earth');
-  if(req.body.landuse) dKinds.push('landuse');
-  if(req.body.places) dKinds.push('places');
-  if(req.body.roads) dKinds.push('roads');
-  if(req.body.water) dKinds.push('water');
+  let style = JSON.parse(req.body.curStyle)
+  dKinds = style.map(function(v) {
+    return {
+      id: v.id,
+      source: v["source-layer"]
+    }
+  })
 
   var tilesToFetch = getTilesToFetch(startLat, endLat, startLon, endLon);
 
@@ -271,28 +287,48 @@ router.post('/request-map', function(req, res, next) {
   }
 
 
-function bakeJson(resultArray) {
-  var geojsonToReform = setupJson(dKinds);
-  // response geojson array
-  for (let result of resultArray) {
-    // inside of one object
-    for (let response in result) {
-      // if tthe property is one of dataKinds that user selected
-      if (dKinds.indexOf(response) > -1) {
-        let responseResult = result[response];
+  function bakeJson(resultArray) {  // response geojson array
+  var geojsonToReform = setupJson(style);
+
+  for (let layer of dKinds) {
+    for (let result of resultArray) {
+      for (let response in result) {
+        if (layer.id == response || layer.source == response) {
+          // then layer is an All layer
+          let responseResult = result[response]
+          
           for (let feature of responseResult.features) {
-            var dataKindTitle = feature.properties.kind;
-            if(geojsonToReform[response].hasOwnProperty(dataKindTitle)) {
-              geojsonToReform[response][dataKindTitle].features.push(feature);
-            } else {
-              geojsonToReform[response]['etc'].features.push(feature)
+            let dataKindTitle = (layer.id == "buildings") ? feature.properties.kind_detail : feature.properties.kind
+            if (geojsonToReform[response]) {
+              if (geojsonToReform[response].hasOwnProperty(dataKindTitle)) {
+                geojsonToReform[response][dataKindTitle].features.push(feature);
+              } else {
+                geojsonToReform[response]
+              }
             }
           }
-        }
+        } 
+        // else if (layer.source == response) {
+        //   // then layer is a sublayer
+        //   let responseResult = result[response]
+        //   for (let feature of responseResult.features) {
+        //     let dataKindTitle = (layer.id == "buildings") ? feature.properties.kind_detail : feature.properties.kind
+        //     if (geojsonToReform[response]) {
+        //       if (geojsonToReform[response].hasOwnProperty(dataKindTitle)) {
+        //         geojsonToReform[response][dataKindTitle].features.push(feature);
+        //       } else {
+        //         geojsonToReform[response]
+        //       }
+        //     }
+        //   }
+        //   console.log(responseResult)
+        // }
       }
     }
-    writeSVGFile(geojsonToReform);
+
   }
+  writeSVGFile(geojsonToReform);
+}
 
   function writeSVGFile(reformedJson) {
     //d3 needs query selector from dom
