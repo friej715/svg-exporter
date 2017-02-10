@@ -60,32 +60,38 @@ function setupJson(dKinds) {
           },
           ferry: {
             features:[]
-          },
-          etc: {
-            features: []
           }
         }
-      } else if (layerName === 'boundaries') {
+      }
+      else if (layerName === 'transit') {
         formattedJson[layerName] = {
-          country: {
+          light_rail : {
+              features: []
+          },
+          platform : {
+              features: []
+          },
+          railway : {
+              features: []
+          },
+          subway : {
+              features: []
+          },
+          train : {
+              features: []
+          },
+          tram : {
+              features: []
+          }
+        }
+
+      }
+       else if (layerName === 'boundaries') {
+        formattedJson[layerName] = {
+          aboriginal_lands: {
             features: []
           },
           county: {
-            features: []
-          },
-          disputed: {
-            features: []
-          },
-          indefinite: {
-            features: []
-          },
-          interminate: {
-            features: []
-          },
-          lease_limit: {
-            features: []
-          },
-          line_of_control: {
             features: []
           },
           locality: {
@@ -94,15 +100,9 @@ function setupJson(dKinds) {
           microregion: {
             features: []
           },
-          map_unit: {
-            features: []
-          },
           region: {
             features: []
           },
-          etc: {
-            features: []
-          }
         }
       } 
       else if (layerName === 'buildings') {
@@ -486,15 +486,6 @@ function setupJson(dKinds) {
       }
       else if (layerName === 'water') {
         formattedJson[layerName] = {
-          basin: {
-            features: []
-          },
-          bay: {
-            features: []
-          },
-          dock: {
-            features: []
-          },
           lake: {
             features: []
           },
@@ -504,15 +495,6 @@ function setupJson(dKinds) {
           river: {
             features: []
           },
-          riverbank: {
-            features: []
-          },
-          swimming_pool: {
-            features: []
-          },
-          etc: {
-            features: []
-          }
         }
       }
       else
@@ -560,7 +542,7 @@ router.post('/request-map', function(req, res, next) {
 
   // -74.0059700, 40.7142700
   // 74.0059700 W, 40.7142700 N
-  var zoom = parseInt(req.body.zoomLevel);
+  var zoom = parseInt(req.body.zoomLevel) + 2;
 
   var lat1 = lat2tile(parseFloat(req.body.startLat), zoom)
   var lat2 = lat2tile(parseFloat(req.body.endLat), zoom)
@@ -635,7 +617,6 @@ router.post('/request-map', function(req, res, next) {
         // Success!
         var data = JSON.parse(request.responseText);
         jsonArray.push(data);
-        console.log(jsonArray)
 
         if (xCount > 0) {
           if (yCount > 0) {
@@ -674,26 +655,45 @@ router.post('/request-map', function(req, res, next) {
   for (let layer of dKinds) {
     for (let result of resultArray) {
       for (let response in result) {
-        if (layer.id == response || layer.source == response) {
+        if (layer.id == response && response != "water") {
           let responseResult = result[response]
           
           for (let feature of responseResult.features) {
-            console.log(feature)
+            let dataKindTitle = (layer.source == "buildings") ? feature.properties.kind_detail : feature.properties.kind
+            if (geojsonToReform[response]) {
+              if (!geojsonToReform[response].hasOwnProperty(dataKindTitle)) {
+                geojsonToReform[response][dataKindTitle] = {"features": []};
+              } 
+              console.log(feature.properties.min_zoom)
+              if (feature.properties.min_zoom <= zoom - 2) {
+
+                geojsonToReform[response][dataKindTitle].features.push(feature);    
+              }
+              
+              
+            }
+          }
+        } else if (layer.source == response && response != "water") {
+          let responseResult = result[response]
+          
+          for (let feature of responseResult.features) {
             let dataKindTitle = (layer.source == "buildings") ? feature.properties.kind_detail : feature.properties.kind
             if (geojsonToReform[response]) {
               if (geojsonToReform[response].hasOwnProperty(dataKindTitle)) {
-                geojsonToReform[response][dataKindTitle].features.push(feature);
-              } else {
-                geojsonToReform[response]
+                if (feature.properties.min_zoom <= zoom - 2) {
+                  geojsonToReform[response][dataKindTitle].features.push(feature);    
+                }
+              
+
+                // geojsonToReform[response][dataKindTitle].features.push(feature);     
               }
             }
           }
-        } 
+        }
       }
     }
 
   }
-  console.log(geojsonToReform)
   writeSVGFile(geojsonToReform);
 }
 
@@ -742,6 +742,7 @@ router.post('/request-map', function(req, res, next) {
                   .attr('d', previewFeature)
                   .attr('fill','none')
                   .attr('stroke','black')
+                  .attr('stroke-width', 1)
               }
             }
           }
