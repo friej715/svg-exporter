@@ -104,7 +104,387 @@ function setupJson(dKinds) {
             features: []
           }
         }
-      } else if (layerName === 'water') {
+      } 
+      else if (layerName === 'buildings') {
+        formattedJson[layerName] = {
+          abandoned: {
+            features: []
+          },
+          administrative: {
+                  features: []
+          },
+          agricultural: {
+                  features: []
+          },
+          airport: {
+                  features: []
+          },
+          allotment_house: {
+                  features: []
+          },
+          apartments: {
+                  features: []
+          },
+          arbour: {
+                  features: []
+          },
+          bank: {
+                  features: []
+          },
+          barn: {
+                  features: []
+          },
+          basilica: {
+                  features: []
+          },
+          beach_hut: {
+                  features: []
+          },
+          bell_tower: {
+                  features: []
+          },
+          boathouse: {
+                  features: []
+          },
+          brewery: {
+                  features: []
+          },
+          bridge: {
+                  features: []
+          },
+          bungalow: {
+                  features: []
+          },
+          bunker: {
+                  features: []
+          },
+          cabin: {
+                  features: []
+          },
+          carport: {
+                  features: []
+          },
+          castle: {
+                  features: []
+          },
+          cathedral: {
+                  features: []
+          },
+          chapel: {
+                  features: []
+          },
+          chimney: {
+                  features: []
+          },
+          church: {
+                  features: []
+          },
+          civic: {
+                  features: []
+          },
+          clinic: {
+                  features: []
+          },
+          closed: {
+                  features: []
+          },
+          clubhouse: {
+                  features: []
+          },
+          collapsed: {
+                  features: []
+          },
+          college: {
+                  features: []
+          },
+          commercial: {
+                  features: []
+          },
+          construction: {
+                  features: []
+          },
+          container: {
+                  features: []
+          },
+          convent: {
+                  features: []
+          },
+          cowshed: {
+                  features: []
+          },
+          dam: {
+                  features: []
+          },
+          damaged: {
+                  features: []
+          },
+          depot: {
+                  features: []
+          },
+          destroyed: {
+                  features: []
+          },
+          detached: {
+                  features: []
+          },
+          disused: {
+                  features: []
+          },
+          dormitory: {
+                  features: []
+          },
+          duplex: {
+                  features: []
+          },
+          factory: {
+                  features: []
+          },
+          farm: {
+                  features: []
+          },
+          farm_auxiliary: {
+                  features: []
+          },
+          fire_station: {
+                  features: []
+          },
+          garage: {
+                  features: []
+          },
+          garages: {
+                  features: []
+          },
+          gazebo: {
+                  features: []
+          },
+          ger: {
+                  features: []
+          },
+          glasshouse: {
+                  features: []
+          },
+          government: {
+                  features: []
+          },
+          grandstand: {
+                  features: []
+          },
+          greenhouse: {
+                  features: []
+          },
+          hangar: {
+                  features: []
+          },
+          healthcare: {
+                  features: []
+          },
+          hermitage: {
+                  features: []
+          },
+          historical: {
+                  features: []
+          },
+          hospital: {
+                  features: []
+          },
+          hotel: {
+                  features: []
+          },
+          house: {
+                  features: []
+          },
+          houseboat: {
+                  features: []
+          },
+          hut: {
+                  features: []
+          },
+          industrial: {
+                  features: []
+          },
+          kindergarten: {
+                  features: []
+          },
+          kiosk: {
+                  features: []
+          },
+          library: {
+                  features: []
+          },
+          mall: {
+                  features: []
+          },
+          manor: {
+                  features: []
+          },
+          manufacture: {
+                  features: []
+          },
+          mixed_use: {
+                  features: []
+          },
+          mobile_home: {
+                  features: []
+          },
+          monastery: {
+                  features: []
+          },
+          mortuary: {
+                  features: []
+          },
+          mosque: {
+                  features: []
+          },
+          museum: {
+                  features: []
+          },
+          office: {
+                  features: []
+          },
+          outbuilding: {
+                  features: []
+          },
+          parking: {
+                  features: []
+          },
+          pavilion: {
+                  features: []
+          },
+          power: {
+                  features: []
+          },
+          prison: {
+                  features: []
+          },
+          proposed: {
+                  features: []
+          },
+          pub: {
+                  features: []
+          },
+          public: {
+                  features: []
+          },
+          residential: {
+                  features: []
+          },
+          restaurant: {
+                  features: []
+          },
+          retail: {
+                  features: []
+          },
+          roof: {
+                  features: []
+          },
+          ruin: {
+                  features: []
+          },
+          ruins: {
+                  features: []
+          },
+          school: {
+                  features: []
+          },
+          semidetached_house: {
+                  features: []
+          },
+          service: {
+                  features: []
+          },
+          shed: {
+                  features: []
+          },
+          shelter: {
+                  features: []
+          },
+          shop: {
+                  features: []
+          },
+          shrine: {
+                  features: []
+          },
+          silo: {
+                  features: []
+          },
+          slurry_tank: {
+                  features: []
+          },
+          stable: {
+                  features: []
+          },
+          stadium: {
+                  features: []
+          },
+          static_caravan: {
+                  features: []
+          },
+          storage: {
+                  features: []
+          },
+          storage_tank: {
+                  features: []
+          },
+          store: {
+                  features: []
+          },
+          substation: {
+                  features: []
+          },
+          summer_cottage: {
+                  features: []
+          },
+          summer_house: {
+                  features: []
+          },
+          supermarket: {
+                  features: []
+          },
+          synagogue: {
+                  features: []
+          },
+          tank: {
+                  features: []
+          },
+          temple: {
+                  features: []
+          },
+          terrace: {
+                  features: []
+          },
+          tower: {
+                  features: []
+          },
+          train_station: {
+                  features: []
+          },
+          transformer_tower: {
+                  features: []
+          },
+          transportation: {
+                  features: []
+          },
+          university: {
+                  features: []
+          },
+          utility: {
+                  features: []
+          },
+          veranda: {
+                  features: []
+          },
+          warehouse: {
+                  features: []
+          },
+          wayside_shrine: {
+                  features: []
+          },
+          works: {
+                  features: []
+          },
+        }
+      }
+      else if (layerName === 'water') {
         formattedJson[layerName] = {
           basin: {
             features: []
@@ -255,6 +635,7 @@ router.post('/request-map', function(req, res, next) {
         // Success!
         var data = JSON.parse(request.responseText);
         jsonArray.push(data);
+        console.log(jsonArray)
 
         if (xCount > 0) {
           if (yCount > 0) {
@@ -294,11 +675,11 @@ router.post('/request-map', function(req, res, next) {
     for (let result of resultArray) {
       for (let response in result) {
         if (layer.id == response || layer.source == response) {
-          // then layer is an All layer
           let responseResult = result[response]
           
           for (let feature of responseResult.features) {
-            let dataKindTitle = (layer.id == "buildings") ? feature.properties.kind_detail : feature.properties.kind
+            console.log(feature)
+            let dataKindTitle = (layer.source == "buildings") ? feature.properties.kind_detail : feature.properties.kind
             if (geojsonToReform[response]) {
               if (geojsonToReform[response].hasOwnProperty(dataKindTitle)) {
                 geojsonToReform[response][dataKindTitle].features.push(feature);
@@ -308,25 +689,11 @@ router.post('/request-map', function(req, res, next) {
             }
           }
         } 
-        // else if (layer.source == response) {
-        //   // then layer is a sublayer
-        //   let responseResult = result[response]
-        //   for (let feature of responseResult.features) {
-        //     let dataKindTitle = (layer.id == "buildings") ? feature.properties.kind_detail : feature.properties.kind
-        //     if (geojsonToReform[response]) {
-        //       if (geojsonToReform[response].hasOwnProperty(dataKindTitle)) {
-        //         geojsonToReform[response][dataKindTitle].features.push(feature);
-        //       } else {
-        //         geojsonToReform[response]
-        //       }
-        //     }
-        //   }
-        //   console.log(responseResult)
-        // }
       }
     }
 
   }
+  console.log(geojsonToReform)
   writeSVGFile(geojsonToReform);
 }
 
