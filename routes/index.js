@@ -54,9 +54,6 @@ function setupJson(dKinds) {
           aerialway: {
             features: []
           },
-          rail: {
-            features:[]
-          },
           path: {
             features:[]
           },
@@ -666,10 +663,12 @@ router.post('/request-map', function(req, res, next) {
               if (!geojsonToReform[response].hasOwnProperty(dataKindTitle)) {
                 geojsonToReform[response][dataKindTitle] = {"features": []};
               } 
-              console.log(feature.properties.min_zoom)
               if (feature.properties.min_zoom <= zoom - ZOOM_FIX) {
-
-                geojsonToReform[response][dataKindTitle].features.push(feature);    
+                console.log(feature.properties.kind)
+                if (feature.properties.kind != "rail") {
+                  geojsonToReform[response][dataKindTitle].features.push(feature);      
+                }
+                
               }
               
               
